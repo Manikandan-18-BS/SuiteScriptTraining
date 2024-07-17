@@ -34,14 +34,14 @@ function(message) {
             console.log('Apply:',applyCoupon);
 
             if(applyCoupon === true){
-                currentRec.getField('custentity_jj_coupon_code').isDisplay= true;
+                currentRec.getField('custentity_jj_coupon_code').isDisabled= false;
                 // setFieldDisplayType(currentRec, form, 'custentity_jj_coupon_code', 'normal');
             } else
             
             {
 
                 currentRec.setValue('custentity_jj_coupon_code','');
-                currentRec.getField('custentity_jj_coupon_code').isDisplay= false;
+                currentRec.getField('custentity_jj_coupon_code').isDisabled= true;
                 // setFieldDisplayType(currentRec, form, 'custentity_jj_coupon_code', 'disabled');
             };
 

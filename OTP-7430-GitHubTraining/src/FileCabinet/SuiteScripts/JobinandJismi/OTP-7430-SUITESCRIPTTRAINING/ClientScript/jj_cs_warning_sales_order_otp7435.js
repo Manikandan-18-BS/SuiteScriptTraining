@@ -45,6 +45,10 @@ function(currentRecord, record, dialog) {
             }).then(function(result){
 
                 return result.value;
+            }).catch(function(reason){
+
+                console.log('Dialog canceled: ' + reason);
+                return false;
             });
         }
 
