@@ -18,7 +18,7 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
          */
         const onRequest = (scriptContext) => {
 
-            // try{
+            try{
 
                 if(scriptContext.request.method === 'GET'){
 
@@ -60,18 +60,19 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                         container:'custpage_primary_information'
                     }).isMandatory = true;
 
-                    let salRepValues =form.addField({
+                    let salRepValues = form.addField({
                         id:'custpage_salesrep',
                         label:'Sales Rep',
                         type: serverWidget.FieldType.SELECT,
                         container:'custpage_primary_information'
-                    }).isMandatory = true;
+                    });
+                    salRepValues.isMandatory = true;
                     log.debug('working');
 
-                    // salRepValues.addSelectOptions({
-                    //     value: '',
-                    //     text: ''
-                    // });
+                    salRepValues.addSelectOption({
+                        value: '',
+                        text: ''
+                    });
                     log.debug('working 1');
 
                     let salSrch = search.create({
@@ -82,7 +83,7 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
 
                     salSrch.run().each(function(result){
 
-                        let salesRep = result.getValue('entity');
+                        let salesRep = result.getValue('entityid');
                         log.debug('Sales Rep:', salesRep);
 
                         let SalesId = result.getValue('internalid');
@@ -94,6 +95,10 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                         });
 
                         return true;
+                    });
+
+                    form.addSubmitButton({
+                        label: 'Submit'
                     });
 
                     scriptContext.response.writePage(form);
@@ -128,10 +133,10 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                     scriptContext.response.write(messageValue);
                 }
 
-            // }
-            // catch(e){
-            //     log.error('Error:',e.message);
-            // };
+            }
+            catch(e){
+                log.error('Error:',e.message);
+            };
 
         }
 

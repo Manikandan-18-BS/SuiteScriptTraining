@@ -37,45 +37,62 @@ function(currentRecord, record, search) {
      * @since 2015.2
      */
     function fieldChanged(scriptContext) {
-        let currentRec = scriptContext.currentRecord;
-        let fieldId = scriptContext.fieldId;
-        let sublistId = scriptContext.sublistId;
 
         try{
 
-        if(sublistId === 'item'  && fieldId === 'item'){
+            // if(scriptContext.mode ==='create'){
 
-            let item = currentRec.getCurrentSublistValue({
-                sublistId:'item',
-                fieldId: 'item'
-            });
-            log.debug('Item :',item);
+                let currentRec = scriptContext.currentRecord;
+                let fieldId = scriptContext.fieldId;
 
-            let itemRec = search.create({
-                type: search.Type.ITEM,
-                filters:['internalid','is',item],
-                columns:['internalid','quantityintransit']
-            });
-            let inTransit ='';
-            itemRec.run().each(function(result){
+                if(fieldId === 'quantity'){
 
-            inTransit = result.getValue('quantityintransit');
-            log.debug('In Transit Quantity:',inTransit);
+                    let item = currentRec.getCurrentSublistValue({
+                        sublistId:'item',
+                        fieldId:'item'
+                    });
+                    log.debug('Item: ',item);
 
-            return true;
-        });
+                    let loc = currentRec.getValue('location');
+                    log.debug('Location :',loc);
 
-            currentRec.setCurrentSublistValue({
-                sublistId:'item',
-                fieldId:'custcol_jj_in_transit_quantity',
-                value: inTransit
-            });
+                    let quan = currentRec.getCurrentSublistValue({
+                        sublistId:'item',
+                        fieldId:'quantity'
+                    });
+
+                    let itemQuan ='';
+
+                    let itemSrch = search.lookupFields({
+                        type: search.Type.ITEM,
+                        id: item,
+                        columns:['quantityonhand']
+                    });
+
+                    itemQuan = itemSrch.quantityonhand;
+                    log.debug('Item On Hand:',itemQuan);
+
+                    currentRec.setCurrentSublistValue({
+                        sublistId:'item',
+                        fieldId:'custcol_jj_item_availability',
+                        value: itemQuan
+                    });
+
+                    if(itemQuan > quan){
+
+                        currentRec.setValue('custbody_jj_item_availability_status',"Available");
+                    }
+                    else{
+                        currentRec.setValue('custbody_jj_item_availability_status',"Backordered");
+                    };
+                };
+            // };
         }
+        catch(e){
+            log.error('Error Found:',e.message);
+        };
+
     }
-    catch(e){
-        log.error('Error:',e.message);
-    };
-    };
 
     // /**
     //  * Function to be executed when field is slaved.
@@ -180,22 +197,38 @@ function(currentRecord, record, search) {
 
     // }
 
-    // /**
-    //  * Validation function to be executed when record is saved.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @returns {boolean} Return true if record is valid
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function saveRecord(scriptContext) {
+    /**
+     * Validation function to be executed when record is saved.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @returns {boolean} Return true if record is valid
+     *
+     * @since 2015.2
+     */
+    function saveRecord(scriptContext) {
 
-    // }
+        try{
+
+            let currentRec = scriptContext.currentRecord;
+            let itemStatus = currentRec.getValue('custbody_jj_item_availability_status');
+
+            if(itemStatus !== 'Available'){
+                
+                alert('The Sufficient Quantity is not Available.');
+                return false;
+            };
+
+            return true;
+        }
+        catch(e){
+            log.error('Error:',e.message);
+        };
+    };
 
     return {
         // pageInit: pageInit,
-        fieldChanged: fieldChanged
+        fieldChanged: fieldChanged,
         // postSourcing: postSourcing,
         // sublistChanged: sublistChanged,
         // lineInit: lineInit,
@@ -203,7 +236,7 @@ function(currentRecord, record, search) {
         // validateLine: validateLine,
         // validateInsert: validateInsert,
         // validateDelete: validateDelete,
-        // saveRecord: saveRecord
+        saveRecord: saveRecord
     };
     
 });
