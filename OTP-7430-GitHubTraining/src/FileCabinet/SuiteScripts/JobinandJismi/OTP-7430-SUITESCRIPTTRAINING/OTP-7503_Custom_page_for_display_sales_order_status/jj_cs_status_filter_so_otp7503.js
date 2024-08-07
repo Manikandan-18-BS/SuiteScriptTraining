@@ -77,26 +77,26 @@ function(currentRecord, url, https, record, search) {
             let sub = '';
             let dep = '';
 
-            if(fieldId === 'custpage_status'){
+            // if(fieldId === 'custpage_status'){
 
                 sts = currentRecord.getValue('custpage_status');
                 console.log(sts);
-            };
+            // };
 
-            if(fieldId === 'custpage_customer'){
+            // if(fieldId === 'custpage_customer'){
 
                 cust = currentRecord.getValue('custpage_customer');
-            };
+            // };
 
-            if(fieldId === 'custpage_subsidiary'){
+            // if(fieldId === 'custpage_subsidiary'){
 
                 sub = currentRecord.getValue('custpage_subsidiary');
-            };
+            // };
 
-            if(fieldId === 'custpage_department'){
+            // if(fieldId === 'custpage_department'){
 
                 dep = currentRecord.getValue('custpage_department');
-            };
+            // };
 
             // let paramsValue ={
 
