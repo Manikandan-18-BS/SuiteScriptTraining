@@ -2,6 +2,29 @@
  * @NApiVersion 2.1
  * @NScriptType Suitelet
  */
+/***************************************************************************************
+ * *****************
+ * OTP Task
+ * 
+ * OTP-7514:Search through the database to find the matching blood donors
+ * 
+ * 
+ * *************************************************************************************
+ * ******************
+ * 
+ * Author: Jobin and Jismi IT Services LLP
+ * 
+ * Date Created: 06-August-2024
+ * 
+ * Description:Create a new form to search for the eligible blood donors, based on the filters (blood group) and last donation date (should be three months before) with the entered details.The basic blood donor form would have captured the details of the donor in the NetSuite database (using custom records).The new form must capture the details of the required blood group (and the last donation date) to find the best and eligible donors.Every eligible donor must be displayed in the form with their details (such as Name, Phone Number).
+ * 
+ * REVISION HISTORY
+ * 
+ * @version 1.0 OTP-1:06-August-2024: Created the initial build by JJ0327
+ * 
+ * 
+ * ***************************************************************************************
+ *******************/
 define(['N/record', 'N/search', 'N/ui/serverWidget'],
     /**
  * @param{record} record
