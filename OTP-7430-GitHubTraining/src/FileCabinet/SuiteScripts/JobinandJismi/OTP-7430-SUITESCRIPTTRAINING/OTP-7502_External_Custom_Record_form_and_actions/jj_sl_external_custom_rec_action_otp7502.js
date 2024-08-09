@@ -95,6 +95,7 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                     let link ='';
                     let salRep = '';
                     let custId = '';
+                    let salesRepName = '';
 
                     let srch = search.create({
                         type: search.Type.CUSTOMER,
@@ -108,6 +109,9 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                         
                         salRep = result.getValue('salesrep');
                         log.debug('SalesRep Id:',salRep);
+
+                        salesRepName = result.getText('salesrep');
+                        log.debug('SalesRep Name:',salesRepName);
 
                         return true;
                     });
@@ -166,19 +170,24 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                         recId = recCrt.save();
                         log.debug('Rec:',recId);
 
+                        let emailBody = '<p>We hope this email finds you well.</p>' +
+                                        '<p>Customer Details Record has created: '+recId+'</p>' +
+                                        '<p>Best Regards,</p>' +
+                                        '<p>Larry Nelson</p>';
+
                         if(recId){
 
                             if(salRep && !activeRep){
                                     email.send({
                                         author: -5,
-                                        body: 'Customer Details Record has created: '+recId,
+                                        body: '<p>Dear <strong>'+salesRepName+',</strong></p>' + emailBody,
                                         recipients: -5,
                                         subject: "Record Created"
                                     });
 
                                     email.send({
                                         author: -5,
-                                        body: 'Customer Details Record has created: '+recId,
+                                        body: '<p>Dear <strong>Admin,</strong></p>' +emailBody,
                                         recipients: salRep,
                                         subject: "Record Created"
                                     });
@@ -188,7 +197,7 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
 
                                 email.send({
                                     author: -5,
-                                    body: 'Customer Details Record has created: '+recId,
+                                    body: '<p>Dear <strong>Admin,</strong></p>' + emailBody,
                                     recipients:-5,
                                     subject: "Record Created"
                                 });
