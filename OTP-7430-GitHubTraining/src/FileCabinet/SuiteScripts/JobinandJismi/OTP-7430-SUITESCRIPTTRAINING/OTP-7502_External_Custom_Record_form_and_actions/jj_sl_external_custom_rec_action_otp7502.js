@@ -180,14 +180,14 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                             if(salRep && !activeRep){
                                     email.send({
                                         author: -5,
-                                        body: '<p>Dear <strong>'+salesRepName+',</strong></p>' + emailBody,
+                                        body: '<p>Dear <strong>Admin,</strong></p>' +emailBody,
                                         recipients: -5,
                                         subject: "Record Created"
                                     });
 
                                     email.send({
                                         author: -5,
-                                        body: '<p>Dear <strong>Admin,</strong></p>' +emailBody,
+                                        body: '<p>Dear <strong>'+salesRepName+',</strong></p>' + emailBody,
                                         recipients: salRep,
                                         subject: "Record Created"
                                     });
