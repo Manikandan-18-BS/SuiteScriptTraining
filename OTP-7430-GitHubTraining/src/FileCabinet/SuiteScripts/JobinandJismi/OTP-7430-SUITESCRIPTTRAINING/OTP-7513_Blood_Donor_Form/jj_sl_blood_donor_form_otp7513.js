@@ -2,6 +2,29 @@
  * @NApiVersion 2.1
  * @NScriptType Suitelet
  */
+/***************************************************************************************
+ * *****************
+ * OTP Task
+ * 
+ * OTP-7513:Custom form to store blood donor details and track them in database
+ * 
+ * 
+ * *************************************************************************************
+ * ******************
+ * 
+ * Author: Jobin and Jismi IT Services LLP
+ * 
+ * Date Created: 05-August-2024
+ * 
+ * Description: The company would like to host a custom form that records the blood requirement from various users. We don't insist the form to be very attractive, a traditional NetSuite UI form would do the job for us. But it is important that the solution offered should be functionally well capable of handling various use cases.The basic features of the blood requirement registration form are described below.The form must contain a data entry form for the company employees to track down the blood donor details. They should be able to store Name (First Name, Last Name), Gender, Phone Number, Blood Group, Last Donation Date.
+ * 
+ * REVISION HISTORY
+ * 
+ * @version 1.0 OTP-1:05-August-2024: Created the initial build by JJ0327
+ * 
+ * 
+ * ***************************************************************************************
+ *******************/
 define(['N/record', 'N/search', 'N/ui/serverWidget'],
     /**
  * @param{record} record
