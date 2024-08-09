@@ -112,6 +112,8 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                         return true;
                     });
 
+                    let activeRep = '';
+
                     if(salRep){
                         let activeSrch = search.lookupFields({
                             type: search.Type.EMPLOYEE,
@@ -119,7 +121,7 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                             columns: ['isinactive']
                         });
 
-                        let activeRep = activeSrch.isinactive;
+                        activeRep = activeSrch.isinactive;
                         log.debug("Active:",activeRep);
                     }
 
