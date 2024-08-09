@@ -57,14 +57,14 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                         label: 'Customer Name',
                         container: 'custpage_field_group',
                         type: serverWidget.FieldType.TEXT
-                    });
+                    }).isMandatory = true;
 
                     form.addField({
                         id:'custpage_email',
                         label:'Customer Email',
                         container: 'custpage_field_group',
                         type: serverWidget.FieldType.EMAIL
-                    });
+                    }).isMandatory = true;
 
                     form.addField({
                         id:'custpage_subject',
@@ -92,9 +92,9 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                     let sub = scriptContext.request.parameters.custpage_subject;
                     let msg = scriptContext.request.parameters.custpage_message;
 
-                    let link='';
-                    let salRep;
-                    let custId;
+                    let link ='';
+                    let salRep = '';
+                    let custId = '';
 
                     let srch = search.create({
                         type: search.Type.CUSTOMER,
@@ -112,50 +112,92 @@ define(['N/email', 'N/record', 'N/search', 'N/ui/serverWidget'],
                         return true;
                     });
 
+                    if(salRep){
+                        let activeSrch = search.lookupFields({
+                            type: search.Type.EMPLOYEE,
+                            id: salRep,
+                            columns: ['isinactive']
+                        });
+
+                        let activeRep = activeSrch.isinactive;
+                        log.debug("Active:",activeRep);
+                    }
+
                     if(custId){
                         link = 'https://td2924623.app.netsuite.com/app/common/entity/custjob.nl?id='+custId+'&whence=';
                     };
                     log.debug('Link:', link);
 
-                    let recCrt = record.create({
-                        type: 'customrecord_jj_customer_details',
-                        isDynamic: true
+                    let recId = '';
+
+                    let recSrch = search.create({
+                        type:'customrecord_jj_customer_details',
+                        filters:[["name","is",name], 
+                        "OR", 
+                        ["custrecord_jj_customer_email","is",custEmail]],
+                        columns:['internalid']
                     });
-                    log.debug('Working');
 
-                    recCrt.setValue('name',name);
-                    recCrt.setValue('custrecord_jj_customer_email',custEmail);
-                    recCrt.setValue('custrecord_jj_customer',link);
-                    recCrt.setValue('custrecord_jj_subject',sub);
-                    recCrt.setValue('custrecord_jj_message',msg);
-                    log.debug('Working1');
+                    let srchDup = recSrch.run().getRange({
+                        start: 0,
+                        end:1
+                    });
 
-                    let recId = recCrt.save();
-                    log.debug('Rec:',recId);
+                    let duplicate = srchDup.length > 0;
+                    log.debug(duplicate);
 
-                    if(recId){
+                    if(!duplicate){
 
-                        if(salRep){
+                        let recCrt = record.create({
+                            type: 'customrecord_jj_customer_details',
+                            isDynamic: true
+                        });
+                        log.debug('Working');
 
-                            email.send({
-                                author: -5,
-                                body: 'Customer Details Record has created: '+recId,
-                                recipients: salRep && -5,
-                                subject: "Record Created"
-                            });
-                        }
-                        else{
+                        recCrt.setValue('name',name);
+                        recCrt.setValue('custrecord_jj_customer_email',custEmail);
+                        recCrt.setValue('custrecord_jj_customer',link);
+                        recCrt.setValue('custrecord_jj_subject',sub);
+                        recCrt.setValue('custrecord_jj_message',msg);
+                        log.debug('Working1');
 
-                            email.send({
-                                author: -5,
-                                body: 'Customer Details Record has created: '+recId,
-                                recipients:-5,
-                                subject: "Record Created"
-                            });
-                        }
+                        recId = recCrt.save();
+                        log.debug('Rec:',recId);
+
+                        if(recId){
+
+                            if(salRep && !activeRep){
+                                    email.send({
+                                        author: -5,
+                                        body: 'Customer Details Record has created: '+recId,
+                                        recipients: -5,
+                                        subject: "Record Created"
+                                    });
+
+                                    email.send({
+                                        author: -5,
+                                        body: 'Customer Details Record has created: '+recId,
+                                        recipients: salRep,
+                                        subject: "Record Created"
+                                    });
+                                    log.debug('Sales  Rep:',salRep);
+                            }
+                            else{
+
+                                email.send({
+                                    author: -5,
+                                    body: 'Customer Details Record has created: '+recId,
+                                    recipients:-5,
+                                    subject: "Record Created"
+                                });
+                                log.debug('No sales Rep')
+                            };
+                        };
+                        scriptContext.response.write("Record Created")
                     }
-
-                    scriptContext.response.write("Record Created")
+                    else{
+                        scriptContext.response.write("A record with this ID already exists. You must enter a unique customer ID for each record you create.")
+                    };
                 }
 
             }
