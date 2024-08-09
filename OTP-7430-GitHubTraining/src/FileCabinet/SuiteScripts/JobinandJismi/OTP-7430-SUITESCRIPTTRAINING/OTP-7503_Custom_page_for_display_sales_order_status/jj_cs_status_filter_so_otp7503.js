@@ -13,7 +13,7 @@
  * *************************************************************************************
  * ******************
  * 
- * Author: Jobin and Jismi IT Services
+ * Author: Jobin and Jismi IT Services LLP
  * 
  * Date Created: 02-August-2024
  * 
@@ -26,15 +26,14 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/currentRecord', 'N/url', 'N/https', 'N/record', 'N/search'],
+define(['N/currentRecord', 'N/url','N/record', 'N/search'],
 /**
  * @param{currentRecord} currentRecord
  * @param{url} url
- * @param{https} https
  * @param{record} record
  * @param{search} search
  */
-function(currentRecord, url, https, record, search) {
+function(currentRecord, url,record, search) {
     
     // /**
     //  * Function to be executed after page is initialized.
