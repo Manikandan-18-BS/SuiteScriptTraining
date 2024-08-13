@@ -25,13 +25,11 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/currentRecord', 'N/record', 'N/search'],
+define(['N/record'],
     /**
- * @param{currentRecord} currentRecord
  * @param{record} record
- * @param{search} search
  */
-    (currentRecord, record, search) => {
+    ( record) => {
         /**
          * Defines the function definition that is executed before record is loaded.
          * @param {Object} scriptContext
