@@ -115,7 +115,7 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                     log.debug('Date:',date);
 
                     let crtRec = record.create({
-                        type: 'customrecord_blood_donor_details',
+                        type: 'customrecord_jj_blood_donor_details',
                         isDynamic:true
                     });
 
@@ -124,7 +124,7 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                     crtRec.setValue('custrecord_jj_last_name_rec',lastName);
                     crtRec.setValue('custrecord_jj_gender',gender);
                     crtRec.setValue('custrecord_jj_phone_number',phone);
-                    crtRec.setValue('custrecord_blood_group',bloodGrp);
+                    crtRec.setValue('custrecord_jj_blood_group',bloodGrp);
                     crtRec.setValue('custrecord_jj_last_donation_date',date);
 
                     let recId = crtRec.save();
