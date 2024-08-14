@@ -103,8 +103,6 @@ define(['N/record'],
                                 id: ent,
                                 values: {'custentity_jj_address_changed':true}
                             });
-                            
-                            break;
                         }
                         else{
                             record.submitFields({
