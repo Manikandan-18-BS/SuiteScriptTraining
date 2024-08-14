@@ -26,14 +26,12 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/currentRecord', 'N/record', 'N/search', 'N/url'],
+define(['N/currentRecord', 'N/url'],
 /**
  * @param{currentRecord} currentRecord
- * @param{record} record
- * @param{search} search
  * @param{url} url
  */
-function(currentRecord, record, search, url) {
+function(currentRecord, url) {
     
     // /**
     //  * Function to be executed after page is initialized.
