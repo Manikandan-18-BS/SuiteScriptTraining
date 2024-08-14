@@ -25,13 +25,12 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/record', 'N/search', 'N/ui/serverWidget'],
+define(['N/record','N/ui/serverWidget'],
     /**
  * @param{record} record
- * @param{search} search
  * @param{serverWidget} serverWidget
  */
-    (record, search, serverWidget) => {
+    (record,serverWidget) => {
         /**
          * Defines the Suitelet script trigger point.
          * @param {Object} scriptContext
@@ -85,9 +84,10 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
 
                     form.addField({
                         id: 'custpage_blood_group',
-                        type:serverWidget.FieldType.TEXT,
+                        type:serverWidget.FieldType.SELECT,
                         label:'Blood Group',
-                        container:'custpage_primary'
+                        container:'custpage_primary',
+                        source:'customlist_jj_blood_group'
                     }).isMandatory = true;
 
                     form.addField({
