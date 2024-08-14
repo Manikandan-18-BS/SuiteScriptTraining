@@ -47,7 +47,7 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                         title: 'Sales Order List'
                     });
 
-                    form.clientScriptFileId = 3497;
+                    form.clientScriptFileId = 2568;
 
                     form.addFieldGroup({
                         id: 'custpage_filters',
@@ -230,6 +230,8 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                     let subsidiary = scriptContext.request.parameters.subsidiary || '';
                     let department = scriptContext.request.parameters.department || '';
 
+                    log.debug(customer);
+
                     sts.defaultValue = status;
                     cust.defaultValue = customer;
                     sub.defaultValue = subsidiary;
@@ -240,7 +242,7 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                                 ['status', 'noneof', 'SalesOrd:A', 'SalesOrd:C', 'SalesOrd:G', 'SalesOrd:H']];
 
                     if (status) {filter[2] = ['status', 'is', status];}
-                    if (customer) {filter.push('AND', ['entity', 'anyof', customer]);}
+                    if (customer) {filter.push('AND', ['customermain.internalid', 'anyof', customer]);}
                     if (subsidiary) {filter.push('AND', ['subsidiary', 'anyof', subsidiary]);}
                     if (department) {filter.push('AND', ['department', 'anyof', department]);}
 

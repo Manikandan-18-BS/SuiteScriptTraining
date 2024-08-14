@@ -123,8 +123,8 @@ function(currentRecord, url,record, search) {
                 // });
 
                 document.location = url.resolveScript({
-                    scriptId: 'customscript_jj_sl_custom_page_displ_so',
-                    deploymentId: 'customdeploy_jj_sl_custom_page_displ_so',
+                    scriptId: 'customscript_jj_sl_cus_page_dis_so',
+                    deploymentId: 'customdeploy_jj_sl_cus_page_dis_so',
                     params: {
 
                         statusVal: sts || '',
