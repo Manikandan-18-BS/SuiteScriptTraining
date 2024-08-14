@@ -25,13 +25,12 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/record', 'N/search', 'N/ui/serverWidget'],
+define(['N/search', 'N/ui/serverWidget'],
     /**
- * @param{record} record
  * @param{search} search
  * @param{serverWidget} serverWidget
  */
-    (record, search, serverWidget) => {
+    (search, serverWidget) => {
         /**
          * Defines the Suitelet script trigger point.
          * @param {Object} scriptContext
@@ -49,57 +48,13 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                     let blood = form.addField({
                         id:'custpage_bloodgrp',
                         label:'Blood Group',
-                        type: serverWidget.FieldType.SELECT
+                        type: serverWidget.FieldType.SELECT,
+                        source: 'customlist_jj_blood_group'
                     });
 
                     form.clientScriptFileId = 3500;
 
                     blood.isMandatory = true;
-
-                    blood.addSelectOption({
-                        value: '',
-                        text: ''
-                    });
-
-                    blood.addSelectOption({
-                        value: 'A+',
-                        text: 'A+'
-                    });
-
-                    blood.addSelectOption({
-                        value: 'A-',
-                        text: 'A-'
-                    });
-
-                    blood.addSelectOption({
-                        value: 'B+',
-                        text: 'B+'
-                    });
-
-                    blood.addSelectOption({
-                        value: 'B-',
-                        text: 'B-'
-                    });
-
-                    blood.addSelectOption({
-                        value: 'O+',
-                        text: 'O+'
-                    });
-
-                    blood.addSelectOption({
-                        value: 'O-',
-                        text: 'O-'
-                    });
-
-                    blood.addSelectOption({
-                        value: 'AB+',
-                        text: 'AB+'
-                    });
-
-                    blood.addSelectOption({
-                        value: 'AB-',
-                        text: 'AB-'
-                    });
 
                     let subList = form.addSublist({
                         id: 'custpage_list',
