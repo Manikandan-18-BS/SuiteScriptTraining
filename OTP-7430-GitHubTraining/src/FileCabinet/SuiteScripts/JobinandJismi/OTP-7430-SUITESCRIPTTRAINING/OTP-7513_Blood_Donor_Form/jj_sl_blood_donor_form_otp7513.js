@@ -25,12 +25,13 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/record','N/ui/serverWidget'],
+define(['N/record','N/ui/serverWidget', 'N/search'],
     /**
  * @param{record} record
+ * @param{search} search
  * @param{serverWidget} serverWidget
  */
-    (record,serverWidget) => {
+    (record,serverWidget,search) => {
         /**
          * Defines the Suitelet script trigger point.
          * @param {Object} scriptContext
@@ -113,35 +114,83 @@ define(['N/record','N/ui/serverWidget'],
                     let date =new Date(lastDonation);
                     log.debug('Formated date:',lastDonation);
                     log.debug('Date:',date);
+                    log.debug('Phone:',phone);
 
-                    let crtRec = record.create({
+                    let currentDate = new Date();
+                    log.debug('Current Date:',currentDate);
+
+                    let name = firstName+' '+lastName;
+                    log.debug(name);
+
+                    let recSrch = search.create({
                         type: 'customrecord_jj_blood_donor_details',
-                        isDynamic:true
+                        filters:['name','is',name],
+                        columns:['internalid']
                     });
 
-                    crtRec.setValue('name',firstName+' '+lastName);
-                    crtRec.setValue('custrecord_jj_first_name_rec',firstName);
-                    crtRec.setValue('custrecord_jj_last_name_rec',lastName);
-                    crtRec.setValue('custrecord_jj_gender',gender);
-                    crtRec.setValue('custrecord_jj_phone_number',phone);
-                    crtRec.setValue('custrecord_jj_blood_group',bloodGrp);
-                    crtRec.setValue('custrecord_jj_last_donation_date',date);
+                    let dup = recSrch.run().getRange({
+                        start : 0,
+                        end: 1
+                    });
 
-                    let recId = crtRec.save();
+                    let duplicate = dup.length > 0;
+                    log.debug(duplicate);
 
-                    let details = 'Blood Donor Details <br>'+'First Name: '+firstName+'<br>'+'Last Name: '+lastName+'<br>'+'Gender: '+gender+'<br>';
-                    details +='Phone Number: '+phone+'<br>'+'Blood Group: '+bloodGrp+'<br>'+'Last Donation Date: '+lastDonation+'<br>'+'Record Id: '+recId;
+                    if (phone && !/^\d+$/.test(phone)) {
+                        
+                        scriptContext.response.write('Please enter only numbers for the phone number.');
 
-                    scriptContext.response.write(details);
+                    }
+                    else{
+
+                        if(date > currentDate){
+
+                            scriptContext.response.write('The date cannot be in the future. Please select a valid date.');
+
+                        }
+                        else{
+
+                            if(!duplicate){
+
+                                let crtRec = record.create({
+                                    type: 'customrecord_jj_blood_donor_details',
+                                    isDynamic:true
+                                });
+
+                                crtRec.setValue('name',name);
+                                crtRec.setValue('custrecord_jj_first_name_rec',firstName);
+                                crtRec.setValue('custrecord_jj_last_name_rec',lastName);
+                                crtRec.setValue('custrecord_jj_gender',gender);
+                                crtRec.setValue('custrecord_jj_phone_number',phone);
+                                crtRec.setValue('custrecord_jj_blood_group',bloodGrp);
+                                crtRec.setValue('custrecord_jj_last_donation_date',date);
+
+                                let recId = crtRec.save();
+
+                                let gen = search.lookupFields({
+                                    type: 'customrecord_jj_blood_donor_details',
+                                    id: recId,
+                                    columns: ['custrecord_jj_gender','custrecord_jj_blood_group']
+                                });
+
+                                let genderName = gen.custrecord_jj_gender[0].text;
+                                let bloodName = gen.custrecord_jj_blood_group[0].text;
+
+                                let details = 'Blood Donor Details <br>'+'First Name: '+firstName+'<br>'+'Last Name: '+lastName+'<br>'+'Gender: '+genderName+'<br>';
+                                details +='Phone Number: '+phone+'<br>'+'Blood Group: '+bloodName+'<br>'+'Last Donation Date: '+lastDonation+'<br>'+'Record Id: '+recId;
+
+                                scriptContext.response.write(details);
+                            }
+                            else{
+                                scriptContext.response.write("A record with this ID already exists. You must enter a unique customer ID for each record you create.")
+                            }
+                        }
+                    }
                 }
             }
             catch(e){
                 log.error('Error Found:',e.message);
             };
-
-
         }
-
         return {onRequest}
-
     });
