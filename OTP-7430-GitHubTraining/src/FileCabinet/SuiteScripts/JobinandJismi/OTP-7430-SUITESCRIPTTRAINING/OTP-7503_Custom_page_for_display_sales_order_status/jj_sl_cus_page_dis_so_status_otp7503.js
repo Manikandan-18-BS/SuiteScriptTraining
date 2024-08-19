@@ -333,13 +333,13 @@ define(['N/record', 'N/search', 'N/ui/serverWidget'],
                         subList.setSublistValue({
                             id:'custpage_subtotal',
                             line: i,
-                            value: scrhResult.getValue('netamountnotax') || null
+                            value: scrhResult.getValue('netamountnotax') || 0.00
                         });
 
                         subList.setSublistValue({
                             id:'custpage_tax',
                             line: i,
-                            value: scrhResult.getValue('taxtotal') || null
+                            value: scrhResult.getValue('taxtotal') || 0.00
                         });
 
                         subList.setSublistValue({

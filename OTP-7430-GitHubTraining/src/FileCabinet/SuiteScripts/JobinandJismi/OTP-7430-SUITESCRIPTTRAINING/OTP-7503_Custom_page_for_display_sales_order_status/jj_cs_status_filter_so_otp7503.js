@@ -34,19 +34,20 @@ define(['N/currentRecord', 'N/url','N/record', 'N/search'],
  * @param{search} search
  */
 function(currentRecord, url,record, search) {
-    
-    // /**
-    //  * Function to be executed after page is initialized.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.mode - The mode in which the record is being accessed (create, copy, or edit)
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function pageInit(scriptContext) {
-
-    // }
+    /**
+     * Function to be executed after page is initialized.
+     *
+     * @param {Object} scriptContext
+     * @param {Record} scriptContext.currentRecord - Current form record
+     * @param {string} scriptContext.mode - The mode in which the record is being accessed (create, copy, or edit)
+     *
+     * @since 2015.2
+     */
+    function pageInit(scriptContext)
+    {
+        window.onbeforeunload = null;
+ 
+    }
 
     /**
      * Function to be executed when field is changed.
@@ -76,51 +77,17 @@ function(currentRecord, url,record, search) {
             let sub = '';
             let dep = '';
 
-            // if(fieldId === 'custpage_status'){
 
                 sts = currentRecord.getValue('custpage_status');
                 console.log(sts);
-            // };
-
-            // if(fieldId === 'custpage_customer'){
 
                 cust = currentRecord.getValue('custpage_customer');
-            // };
-
-            // if(fieldId === 'custpage_subsidiary'){
 
                 sub = currentRecord.getValue('custpage_subsidiary');
-            // };
-
-            // if(fieldId === 'custpage_department'){
 
                 dep = currentRecord.getValue('custpage_department');
-            // };
-
-            // let paramsValue ={
-
-            //     statusVal: sts || '',
-            //     customer: cust || '',
-            //     subsidiary: sub || '',
-            //     department: dep || ''
-            // };
 
             if(fieldId === 'custpage_status' || 'custpage_customer' || 'custpage_subsidiary' || 'custpage_department'){
-
-                // let suiteletUrl = url.resolveScript({
-                //     deploymentId: 'customdeploy_jj_sl_custom_page_displ_so',
-                //     scriptId: 'customscript_jj_sl_custom_page_displ_so',
-                // })
-
-                // https.get({
-                //     parameters:params,
-                //     url: suiteletUrl
-                // }).then(function(response){
-                //     let resBody = JSON.parse(response.body);
-                //     console.log(resBody);
-                // }).catch(function(error){
-                //     console.error(error);
-                // });
 
                 document.location = url.resolveScript({
                     scriptId: 'customscript_jj_sl_cus_page_dis_so',
@@ -141,133 +108,9 @@ function(currentRecord, url,record, search) {
         };
     }
 
-    // /**
-    //  * Function to be executed when field is slaved.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.sublistId - Sublist name
-    //  * @param {string} scriptContext.fieldId - Field name
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function postSourcing(scriptContext) {
-
-    // }
-
-    // /**
-    //  * Function to be executed after sublist is inserted, removed, or edited.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.sublistId - Sublist name
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function sublistChanged(scriptContext) {
-
-    // }
-
-    // /**
-    //  * Function to be executed after line is selected.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.sublistId - Sublist name
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function lineInit(scriptContext) {
-
-    // }
-
-    // /**
-    //  * Validation function to be executed when field is changed.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.sublistId - Sublist name
-    //  * @param {string} scriptContext.fieldId - Field name
-    //  * @param {number} scriptContext.lineNum - Line number. Will be undefined if not a sublist or matrix field
-    //  * @param {number} scriptContext.columnNum - Line number. Will be undefined if not a matrix field
-    //  *
-    //  * @returns {boolean} Return true if field is valid
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function validateField(scriptContext) {
-
-    // }
-
-    // /**
-    //  * Validation function to be executed when sublist line is committed.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.sublistId - Sublist name
-    //  *
-    //  * @returns {boolean} Return true if sublist line is valid
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function validateLine(scriptContext) {
-
-    // }
-
-    // /**
-    //  * Validation function to be executed when sublist line is inserted.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.sublistId - Sublist name
-    //  *
-    //  * @returns {boolean} Return true if sublist line is valid
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function validateInsert(scriptContext) {
-
-    // }
-
-    // /**
-    //  * Validation function to be executed when record is deleted.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @param {string} scriptContext.sublistId - Sublist name
-    //  *
-    //  * @returns {boolean} Return true if sublist line is valid
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function validateDelete(scriptContext) {
-
-    // }
-
-    // /**
-    //  * Validation function to be executed when record is saved.
-    //  *
-    //  * @param {Object} scriptContext
-    //  * @param {Record} scriptContext.currentRecord - Current form record
-    //  * @returns {boolean} Return true if record is valid
-    //  *
-    //  * @since 2015.2
-    //  */
-    // function saveRecord(scriptContext) {
-
-    // }
-
     return {
-        // pageInit: pageInit,
-        fieldChanged: fieldChanged
-        // postSourcing: postSourcing,
-        // sublistChanged: sublistChanged,
-        // lineInit: lineInit,
-        // validateField: validateField,
-        // validateLine: validateLine,
-        // validateInsert: validateInsert,
-        // validateDelete: validateDelete,
-        // saveRecord: saveRecord
+        fieldChanged: fieldChanged,
+        pageInit: pageInit
     };
     
 });
