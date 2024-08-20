@@ -52,7 +52,7 @@ define(['N/search', 'N/ui/serverWidget'],
                         source: 'customlist_jj_blood_group'
                     });
 
-                    form.clientScriptFileId = 3500;
+                    form.clientScriptFileId = 2571;
 
                     blood.isMandatory = true;
 
@@ -101,15 +101,13 @@ define(['N/search', 'N/ui/serverWidget'],
                     if(bloodGrp){
 
                         filter.push(['custrecord_jj_last_donation_date','onorbefore','threemonthsagotodate']);
-                        filter.push('AND',['custrecord_blood_group','is',bloodGrp]);
+                        filter.push('AND',['custrecord_jj_blood_group','is',bloodGrp]);
                     }
-
-                    log.debug(filter);
-
+                    
                     let srch = search.create({
-                        type: 'customrecord_blood_donor_details',
+                        type: 'customrecord_jj_blood_donor_details',
                         filters: filter,
-                        columns:['name','custrecord_jj_gender','custrecord_jj_phone_number','custrecord_blood_group','custrecord_jj_last_donation_date']
+                        columns:['name','custrecord_jj_gender','custrecord_jj_phone_number','custrecord_jj_blood_group','custrecord_jj_last_donation_date']
                     });
 
                     let resultSrch = srch.run();
@@ -143,7 +141,7 @@ define(['N/search', 'N/ui/serverWidget'],
                         subList.setSublistValue({
                             id: 'custpage_blood_group',
                             line:i,
-                            value: scrhResult.getValue('custrecord_blood_group')
+                            value: scrhResult.getText('custrecord_jj_blood_group')
                         });
 
                         subList.setSublistValue({
