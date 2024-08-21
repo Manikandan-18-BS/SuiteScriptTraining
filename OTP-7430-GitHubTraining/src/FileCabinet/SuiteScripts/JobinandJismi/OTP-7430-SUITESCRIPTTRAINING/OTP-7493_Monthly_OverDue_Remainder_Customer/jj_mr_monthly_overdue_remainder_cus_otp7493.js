@@ -25,14 +25,14 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/email', 'N/record', 'N/runtime', 'N/search','N/file'],
+define(['N/email', 'N/record', 'N/search','N/file'],
     /**
  * @param{email} email
  * @param{record} record
- * @param{runtime} runtime
  * @param{search} search
+ * @param{file} file
  */
-    (email, record, runtime, search,file) => {
+    (email, record,search,file) => {
         /**
          * Defines the function that is executed at the beginning of the map/reduce process and generates the input data.
          * @param {Object} inputContext
@@ -90,22 +90,16 @@ define(['N/email', 'N/record', 'N/runtime', 'N/search','N/file'],
                 log.debug('Customer:',custName);
                 let custId = result.values.entity.value;
                 let doc = result.values.tranid;
-                // let custEmail = result.values.email;
-                // log.debug('Email:',custEmail);
                 let tot = result.values.total;
                 let daysOver = result.values.daysoverdue;
-                // let salRep = result.values.customermain.salesrep.value;
-                // log.debug('SalesRep :',salRep);
-
+              
                 mapContext.write({
                     key : custId,
                     value:{
                         name: custName,
-                        // email: custEmail,
                         docNum : doc,
                         amt: tot,
                         days: daysOver
-                        // repId: salRep
                     }
                 });
 
@@ -138,7 +132,6 @@ define(['N/email', 'N/record', 'N/runtime', 'N/search','N/file'],
                 let details = reduceContext.values.map(function(value){
                     return JSON.parse(value);
                 });
-                log.debug('Details:',details);
 
                 let repId = record.load({
                     type: record.Type.CUSTOMER,
@@ -147,10 +140,12 @@ define(['N/email', 'N/record', 'N/runtime', 'N/search','N/file'],
                 });
 
                 let rep = repId.getValue('salesrep');
-                log.debug('Sales Rep ID :',rep );
+
+                let repName = repId.getText('salesrep')
 
                 let custEmail = repId.getValue('email');
-                log.debug('Email:',custEmail);
+
+                let customerName = repId.getText('entityid');
 
                 let csvContent = 'Customer Name, Customer Email, Document Number, Amount, Days Overdue\n';
             
@@ -167,13 +162,17 @@ define(['N/email', 'N/record', 'N/runtime', 'N/search','N/file'],
 
                 let csvFileId = csvFile.save();
 
+                let emailBody = '<p>We hope this email finds you well.</p>' +
+                                        '<p>Please check the attached file</p>' +
+                                        '<p>Best Regards,</p>';
+
                 if(rep){
 
                     email.send({
                         author: rep,
                         recipients: custEmail,
                         subject: 'Monthly_overdue_Invoices_Remainder',
-                        body:'Please check the attached file',
+                        body:'<p>Dear <strong>'+customerName+',</strong></p>'+emailBody+'<p>'+repName+'</p>',
                         attachments:[file.load({
                             id: csvFileId
                         })]
@@ -185,7 +184,7 @@ define(['N/email', 'N/record', 'N/runtime', 'N/search','N/file'],
                         author: -5,
                         recipients: custEmail,
                         subject: 'Monthly_overdue_Invoices_Remainder',
-                        body:'Please check the attached file',
+                        body: '<p>Dear <strong>'+customerName+',</strong></p>'+emailBody+'<p>'+repName+'</p>',
                         attachments:[file.load({
                             id:csvFileId
                         })]
