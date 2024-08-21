@@ -25,12 +25,15 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/search', 'N/ui/serverWidget'],
+define(['N/search', 'N/ui/serverWidget','N/format','N/ui/message'],
     /**
  * @param{search} search
  * @param{serverWidget} serverWidget
+ * @param{format} format
+ * @param{message} message
  */
-    (search, serverWidget) => {
+    (search, serverWidget,format,message) => {
+        
         /**
          * Defines the Suitelet script trigger point.
          * @param {Object} scriptContext
@@ -50,6 +53,12 @@ define(['N/search', 'N/ui/serverWidget'],
                         label:'Blood Group',
                         type: serverWidget.FieldType.SELECT,
                         source: 'customlist_jj_blood_group'
+                    });
+
+                    let donationDate = form.addField({
+                        id:'custpage_last_donation_filter',
+                        label:'Last Donation Date On or Before',
+                        type: serverWidget.FieldType.DATE
                     });
 
                     form.clientScriptFileId = 2571;
@@ -92,18 +101,50 @@ define(['N/search', 'N/ui/serverWidget'],
                         type: serverWidget.FieldType.DATE
                     });
 
-                    let bloodGrp = scriptContext.request.parameters.bloodGroup || '';
+                    form.addButton({
+                        id: 'custpage_search',
+                        label: 'Search',
+                        functionName: 'searchForm'
+                    })
 
+                    form.addButton({
+                        id: 'custpage_reset',
+                        label: 'Reset',
+                        functionName: 'resetForm'
+                    });
+
+                    let bloodGrp = scriptContext.request.parameters.bloodGroup || '';
+                    let lstDonation = scriptContext.request.parameters.lastDonation || '';
+
+                    let laDonation ='';
+
+                    if(lstDonation){
+                        
+                        let lastDonationDate = new Date(lstDonation);
+
+                        laDonation = format.format({
+                            value: lastDonationDate,
+                            type: format.Type.DATE
+                        });
+                    }
+                    
                     blood.defaultValue = bloodGrp;
+                    donationDate.defaultValue = laDonation;
 
                     let filter =[];
 
                     if(bloodGrp){
 
-                        filter.push(['custrecord_jj_last_donation_date','onorbefore','threemonthsagotodate']);
-                        filter.push('AND',['custrecord_jj_blood_group','is',bloodGrp]);
+                        filter.push(['custrecord_jj_blood_group','is',bloodGrp]);
+
+                        if(laDonation){
+                            filter.push('AND',['custrecord_jj_last_donation_date','onorbefore',laDonation]);
+                        }
+                        else{
+                            filter.push('AND',['custrecord_jj_last_donation_date','onorbefore','threemonthsagotodate']);
+                        }
                     }
-                    
+
                     let srch = search.create({
                         type: 'customrecord_jj_blood_donor_details',
                         filters: filter,
@@ -149,8 +190,7 @@ define(['N/search', 'N/ui/serverWidget'],
                             line:i,
                             value: scrhResult.getValue('custrecord_jj_last_donation_date')
                         });
-                    };
-
+                    };  
                     scriptContext.response.writePage(form);
                 }
             }
@@ -159,6 +199,7 @@ define(['N/search', 'N/ui/serverWidget'],
             };
 
         }
+      
 
         return {onRequest}
 

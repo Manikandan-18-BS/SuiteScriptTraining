@@ -26,12 +26,14 @@
  * 
  * ***************************************************************************************
  *******************/
-define(['N/currentRecord', 'N/url'],
+define(['N/currentRecord', 'N/url','N/format','N/ui/message'],
 /**
  * @param{currentRecord} currentRecord
  * @param{url} url
+ * @param{format} format
+ * @param{message} message
  */
-function(currentRecord, url) {
+function(currentRecord, url,format,message) {
     
     /**
      * Function to be executed after page is initialized.
@@ -46,51 +48,94 @@ function(currentRecord, url) {
 
         window.onbeforeunload= null;
 
-    }
 
-    /**
-     * Function to be executed when field is changed.
+    }
+/**
+     * Function to be executed when search Button is Clicked.
      *
      * @param {Object} scriptContext
      * @param {Record} scriptContext.currentRecord - Current form record
-     * @param {string} scriptContext.sublistId - Sublist name
-     * @param {string} scriptContext.fieldId - Field name
-     * @param {number} scriptContext.lineNum - Line number. Will be undefined if not a sublist or matrix field
-     * @param {number} scriptContext.columnNum - Line number. Will be undefined if not a matrix field
-     *
+     * 
      * @since 2015.2
      */
-    function fieldChanged(scriptContext) {
+    
+    function searchForm(){
         try{
+            let record = currentRecord.get();
 
-            let fieldId = scriptContext.fieldId;
+            let today = new Date();
+            let toDate = format.format({
+                value: today,
+                type: format.Type.DATE
+            });
 
-            let currentRecord = scriptContext.currentRecord;
+            let threeMonthBefore = new Date();
+            threeMonthBefore.setMonth(today.getMonth()- 3);
 
-            let blood = '';
+            let maxDate = format.format({
+                value: threeMonthBefore,
+                type: format.Type.DATE
+            });
 
-            if(fieldId === 'custpage_bloodgrp'){
-                
-                blood = currentRecord.getValue('custpage_bloodgrp');
+            let blood = record.getValue('custpage_bloodgrp');
+            let date = record.getValue('custpage_last_donation_filter');
+
+            let getDate =''
+
+            if(date){
+                getDate = format.format({
+                    value: date,
+                    type: format.Type.DATE
+                });
+            }
+        
+            let future = getDate > toDate;
+           
+            let notThreeMonth = getDate > maxDate ;
+           
+            if(future){
+
+                alert('The date cannot be in the future. Please select a valid date.');
+
+            }
+            else if(notThreeMonth){
+
+                alert('Last donation date should be three months before from today. The date should be on or before '+maxDate);
+            }
+            else{
 
                 document.location = url.resolveScript({
                     deploymentId: 'customdeploy_jj_sl_eligible_donor',
                     scriptId: 'customscript_jj_sl_eligible_donor',
                     params: {
-                        bloodGroup : blood || ''
+                        bloodGroup : blood || '',
+                        lastDonation: date ||''
                     }
                 });
             }
         }
         catch(e){
-            log.error('Error Found',e.message);
+            console.error('Error Found',e.message);
         };
-
     }
+
+    function resetForm() {
+       
+        document.location = url.resolveScript({
+            deploymentId: 'customdeploy_jj_sl_eligible_donor',
+            scriptId: 'customscript_jj_sl_eligible_donor',
+            params: {
+                 bloodGroup :'',
+                lstDonation: ''
+            }
+        });
+    }
+    
 
     return {
         pageInit: pageInit,
-        fieldChanged: fieldChanged
+        searchForm:searchForm,
+        resetForm: resetForm
     };
     
 });
