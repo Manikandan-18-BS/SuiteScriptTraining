@@ -68,11 +68,12 @@ function(currentRecord,url) {
                     deploymentId: 'customdeploy_jj_sl_list_university',
                     scriptId: 'customscript_jj_sl_list_university',
                     params: {
-                        country:con ||''
+                        country:con
                     }
                 })
             }
             else{
+                
                 alert('Please Select the country');
             }
         }
