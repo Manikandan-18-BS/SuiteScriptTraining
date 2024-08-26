@@ -1,0 +1,22 @@
+<restlet scriptid="customscript_jj_rl_invoice_pdf_response">
+  <description></description>
+  <isinactive>F</isinactive>
+  <name>JJ RL Invoice PDF Response OTP-7440</name>
+  <notifyadmins>F</notifyadmins>
+  <notifyemails></notifyemails>
+  <notifyowner>T</notifyowner>
+  <notifyuser>F</notifyuser>
+  <scriptfile>[/SuiteScripts/JobinandJismi/RAF/jj_rl_invoice_pdf_response_otp7440.js]</scriptfile>
+  <scriptdeployments>
+    <scriptdeployment scriptid="customdeploy_jj_rl_invoice_pdf_response">
+      <allemployees>T</allemployees>
+      <allpartners>F</allpartners>
+      <allroles>T</allroles>
+      <audslctrole></audslctrole>
+      <isdeployed>T</isdeployed>
+      <loglevel>DEBUG</loglevel>
+      <status>TESTING</status>
+      <title>JJ RL Invoice PDF Response OTP-7440</title>
+    </scriptdeployment>
+  </scriptdeployments>
+</restlet>
