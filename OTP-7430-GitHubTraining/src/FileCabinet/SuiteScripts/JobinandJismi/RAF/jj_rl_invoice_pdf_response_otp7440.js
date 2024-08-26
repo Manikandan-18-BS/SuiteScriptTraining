@@ -4,13 +4,14 @@
  */
 define(['N/https', 'N/record', 'N/render', 'N/search', 'N/url','N/file'],
     /**
+ * @param{https} https
  * @param{record} record
  * @param{render} render
  * @param{search} search
  * @param{url} url
  * @param{file} file
  */
-    (record, render, search, url,file) => {
+    (https, record, render, search, url,file) => {
       
         /**
          * Defines the function that is executed when a POST request is sent to a RESTlet.
